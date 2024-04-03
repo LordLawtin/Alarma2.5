@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud_app_f1">
+
+    <TimePicker
+        android:id="@+id/timeP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:amPmBackgroundColor="@color/black"
+        android:amPmTextColor="@color/SegudarioC"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:numbersBackgroundColor="@color/BarraColor"
+        android:numbersInnerTextColor="@color/Primario"
+        android:numbersTextColor="@color/PrimarioC" />
+
+    <EditText
+        android:id="@+id/nameA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeP"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/bordes_de_texto"
+        android:fontFamily="@font/inria_sans"
+        android:hint="Nombre de la alarma"
+        android:textColor="@color/Segudario"
+        android:textColorHighlight="@color/PrimarioC"
+        android:textColorHint="#11E5BF"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameA"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/GuardarA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inria_sans_bold"
+            android:text="Guardar"
+            android:textColorLink="@color/Primario"
+            android:textSize="24sp"
+            app:rippleColor="@color/PrimarioB" />
+
+        <Button
+            android:id="@+id/cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inria_sans_bold"
+            android:text="@string/Cancel"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Alarma20" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/Primario</item>
+        <item name="colorPrimaryVariant">@color/PrimarioC</item>
+        <item name="colorSecondary">@color/Segudario</item>
+        <item name="colorSecondaryVariant">@color/SegudarioC</item>
+        <item name="colorError">@color/Error1</item>
+        <item name="colorButtonNormal">@color/PrimarioB</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorBackgroundFloating">@color/BarraColor</item>
+
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Alarma20" parent="Base.Theme.Alarma20" />
+</resources>

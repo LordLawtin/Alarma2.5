@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navAlarma"
+        android:icon="@drawable/baseline_access_alarm_24"
+        android:title="Alarma" />
+    <item
+        android:id="@+id/navCompartir"
+        android:icon="@drawable/groups"
+        android:title="Compartir" />
+    <item
+        android:id="@+id/navHorario"
+        android:icon="@drawable/calendar"
+        android:title="Horario" />
+    <item
+        android:id="@+id/navCronometro"
+        android:icon="@drawable/temp"
+        android:title="Cronometro" />
+    <item
+        android:id="@+id/navTemporizador"
+        android:icon="@drawable/temporizador"
+        android:title="Temporizador" />
+</menu>
