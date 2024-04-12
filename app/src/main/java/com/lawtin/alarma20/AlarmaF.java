@@ -14,14 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmaF extends AppCompatActivity {
-
-    public static String activeAlarm =" ";
+    public static String activeAlarm=" ";
     private ListView listView;
-    private static final int REQUEST_CODE=1000;
-
-    public static List<Alarm> alarmList=new ArrayList<>();
-    private CustomerAdapter customerAdapter;
+    private static final int REQUEST_CODE = 1000;
+    public static List<Alarm> alarmList =new ArrayList<>();
+    private CustomerAdapter customAdapter;
     private DatabaseHelper db=new DatabaseHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,27 +30,29 @@ public class AlarmaF extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(AlarmaF.this, addActivity.class);
+                Intent intent=new Intent(AlarmaF.this,addActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+
         listView=findViewById(R.id.listView);
         List<Alarm>list=db.getAllAlarms();
         alarmList.addAll(list);
-        customerAdapter=new CustomerAdapter(getApplicationContext(), alarmList);
-        listView.setAdapter(customerAdapter);
+        customAdapter=new CustomerAdapter(getApplicationContext(),alarmList);
+        listView.setAdapter(customAdapter);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode== Activity.RESULT_OK && requestCode==REQUEST_CODE){
-            boolean needRefresh=data.getExtras().getBoolean("needRefresh");
+
+        if (resultCode== Activity.RESULT_OK && requestCode== REQUEST_CODE){
+            boolean needRefresh = data.getExtras().getBoolean("needRefresh");
             if (needRefresh){
                 alarmList.clear();
                 List<Alarm>list=db.getAllAlarms();
                 alarmList.addAll(list);
-                customerAdapter.notifyDataSetChanged();
+                customAdapter.notifyDataSetChanged();
             }
         }
     }

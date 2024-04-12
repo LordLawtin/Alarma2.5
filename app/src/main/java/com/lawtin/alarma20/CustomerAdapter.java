@@ -22,11 +22,11 @@ public class CustomerAdapter extends BaseAdapter {
     private Context context;
     private List<Alarm> alarmList;
     private LayoutInflater layoutInflater;
-    public CustomerAdapter(Context c, List<Alarm> alarmList){
-        this.context=c;
-        this.alarmList=alarmList;
-        layoutInflater=(LayoutInflater.from(context));
 
+    public CustomerAdapter(Context context, List<Alarm> alarmList) {
+        this.context = context;
+        this.alarmList = alarmList;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -36,64 +36,70 @@ public class CustomerAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return alarmList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        convertView=layoutInflater.inflate(R.layout.row_items, null);
-        final Alarm selecetAlarm=alarmList.get(position);
-        final TextView nameTV= convertView.findViewById(R.id.nameTextView);
-        final TextView alarmaTV= convertView.findViewById(R.id.timeTextView);
-        final AlarmManager alarmManager=(AlarmManager) context.getSystemService(ALARM_SERVICE);
-
-        nameTV.setText(selecetAlarm.getNameAlarm());
-        alarmaTV.setText(selecetAlarm.toString());
-
-        final Intent serviceIntent=new Intent(context, AlarmReciver.class);
-
-        final Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, selecetAlarm.getHour());
-        calendar.set(Calendar.MINUTE, selecetAlarm.getHour());
-        calendar.set(Calendar.SECOND, 0);
-        if (calendar.getTimeInMillis()< System.currentTimeMillis()){
-            calendar.add(Calendar.DATE, 1);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.row_items, parent, false);
+            holder = new ViewHolder();
+            holder.nameTV = convertView.findViewById(R.id.nameTextView);
+            holder.alarmTV = convertView.findViewById(R.id.timeTextView);
+            holder.toggleButton = convertView.findViewById(R.id.toggle);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        ToggleButton toggleButton=convertView.findViewById(R.id.toggle);
-        toggleButton.setChecked(selecetAlarm.getStatus());
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        final Alarm selectedAlarm = alarmList.get(position);
+        holder.nameTV.setText(selectedAlarm.getName());
+        holder.alarmTV.setText(selectedAlarm.toString());
+        holder.toggleButton.setChecked(selectedAlarm.getStatus());
+
+        holder.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                selecetAlarm.setStatus(isChecked);
-                DatabaseHelper db= new DatabaseHelper(context);
-                db.updateAlarm(selecetAlarm);
+                selectedAlarm.setStatus(isChecked);
+                DatabaseHelper db = new DatabaseHelper(context);
+                db.updateAlarm(selectedAlarm);
 
-                AlarmaF.alarmList.clear();
-                List<Alarm>list=db.getAllAlarms();
-                AlarmaF.alarmList.addAll(list);
+                alarmList.set(position, selectedAlarm);
                 notifyDataSetChanged();
 
-                if (!isChecked && selecetAlarm.toString().equals(AlarmaF.activeAlarm)){
+                if (!isChecked && selectedAlarm.toString().equals(AlarmaF.activeAlarm)) {
+                    Intent serviceIntent = new Intent(context, AlarmReciver.class);
                     serviceIntent.putExtra("extra", "off");
-                    PendingIntent pendingIntent= PendingIntent.getBroadcast(context,position,serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    alarmManager.cancel(pendingIntent);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, position, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    if (alarmManager != null) {
+                        alarmManager.cancel(pendingIntent);
+                    }
                     context.sendBroadcast(serviceIntent);
-
+                } else if (isChecked) {
+                    Intent serviceIntent = new Intent(context, AlarmReciver.class);
+                    serviceIntent.putExtra("extra", "on");
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, position, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    if (alarmManager != null) {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedAlarm.getAlarmTimeInMillis(), pendingIntent);
+                    }
                 }
             }
-
         });
-        if (selecetAlarm.getStatus()){
-            serviceIntent.putExtra("extra", "on");
-            serviceIntent.putExtra("active", selecetAlarm.toString());
-            PendingIntent pendingIntent= PendingIntent.getBroadcast(context,position,serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent );
-        }
+
         return convertView;
+    }
+
+    static class ViewHolder {
+        TextView nameTV;
+        TextView alarmTV;
+        ToggleButton toggleButton;
     }
 }

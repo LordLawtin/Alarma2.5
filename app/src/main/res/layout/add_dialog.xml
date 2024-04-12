@@ -10,6 +10,7 @@
         android:layout_width="342dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:background="@drawable/bordes_de_texto"
         android:hint="00"
         android:inputType="numberDecimal"
         android:textColor="@color/PrimarioC"

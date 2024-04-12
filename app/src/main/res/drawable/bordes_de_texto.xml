@@ -10,12 +10,12 @@
         android:right="8dp"
         />
     <solid
-        android:color="@color/black"
+        android:color="#00404040"
 
         />
     <stroke
         android:color="@color/Segudario"
-        android:width="6dp"
+        android:width="3dp"
         />
 
 </shape>

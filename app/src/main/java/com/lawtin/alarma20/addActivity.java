@@ -7,62 +7,73 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class addActivity extends AppCompatActivity {
+
     private TimePicker timePicker;
     private EditText editText;
-    private Button buttonSave, buttomCancel;
-    private Alarm alarm;
-    private boolean needRefresh;
+    private Button buttonSave, buttonCancel;
+
+    private boolean needRefresh = false;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activyty_add);
 
-        timePicker=findViewById(R.id.timeP);
-        editText=findViewById(R.id.nameA);
-        buttonSave=findViewById(R.id.GuardarA);
-        buttomCancel=findViewById(R.id.cancelar);
+        timePicker = findViewById(R.id.timeP);
+        editText = findViewById(R.id.nameA);
+        buttonSave = findViewById(R.id.GuardarA);
+        buttonCancel = findViewById(R.id.cancelar);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hour= timePicker.getCurrentHour();
-                int minute=timePicker.getCurrentMinute();
-                String name= editText.getText().toString();
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+                String name = editText.getText().toString();
 
-                DatabaseHelper db=new DatabaseHelper(getApplicationContext());
+                // Validar entrada
+                if (name.isEmpty()) {
+                    editText.setError("Ingrese un nombre para la alarma");
+                    return;
+                }
 
-                alarm=new Alarm(hour,minute,true,name);
-                db.addAlarm(alarm);
+                DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
 
-                needRefresh=true;
+                Alarm alarm = new Alarm(hour, minute, true, name);
+                databaseHelper.addAlarm(alarm);
 
-                onBackPressed();
+                needRefresh = true;
+
+                databaseHelper.close();
+
+                // Proporcionar retroalimentación visual
+                Toast.makeText(addActivity.this, "Alarma guardada", Toast.LENGTH_SHORT).show();
+
+                finish();
             }
         });
 
-        buttomCancel.setOnClickListener(new View.OnClickListener() {
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                onBackPressed();
+            public void onClick(View v) {
+                finish();
             }
-
-
         });
     }
 
     @Override
     public void finish() {
-        Intent data= new Intent();
+        Intent data = new Intent();
         data.putExtra("needRefresh", needRefresh);
-        this.setResult(RESULT_OK, data);
+        setResult(RESULT_OK, data);
         super.finish();
     }
 }
